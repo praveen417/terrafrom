@@ -5,6 +5,6 @@ module "instance" {
   source = "/home/pravpal/Desktop/learning/aws/module/instance"
 }
 
-module "vpc" {
-  source = "/home/pravpal/Desktop/learning/aws/module/vpc"
-}
+#module "vpc" {
+#  source = "/home/pravpal/Desktop/learning/aws/module/vpc"
+#}
