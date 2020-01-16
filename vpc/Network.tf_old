@@ -1,0 +1,81 @@
+provider "aws" {
+  region = "${var.region}"
+}
+
+
+resource "aws_vpc" "Network" {
+  cidr_block       = "${var.cidr_block}"
+  instance_tenancy = "${var.instance_tenancy}"
+  tags = {
+    Name = "Us-East-1 Network"
+  }
+
+}
+
+
+resource "aws_subnet" "prod_subnet" {
+  vpc_id     = "${aws_vpc.Network.id}"
+  cidr_block = "${var.subnet_cidr}"
+  tags = {
+    Name = "Production subnet"
+  }
+
+}
+
+resource "aws_security_group" "sg_group" {
+  vpc_id = "${aws_vpc.Network.id}"
+  ingress {
+    cidr_blocks = ["${aws_subnet.prod_subnet.cidr_block}"]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "Security Group"
+  }
+}
+
+resource "aws_route_table" "rt_table" {
+  vpc_id = "${aws_vpc.Network.id}"
+  tags = {
+    Name = "Route Table"
+  }
+}
+
+
+resource "aws_internet_gateway" "IG_gate" {
+  vpc_id = "${aws_vpc.Network.id}"
+  tags = {
+    Name = "Internet Gateway"
+  }
+}
+
+resource "aws_route" "public" {
+  route_table_id         = "${aws_route_table.rt_table.id}"
+  destination_cidr_block = "0.0.0.0/0"
+  gateway_id             = "${aws_internet_gateway.IG_gate.id}"
+}
+
+
+resource "aws_subnet" "Dev_subnet" {
+  vpc_id     = "${aws_vpc.Network.id}"
+  cidr_block = "${var.Dev_subnet_cidr}"
+  tags = {
+    Name = "Devlopment Subnet"
+  }
+}
+
+resource "aws_subnet" "dmz_subnet" {
+  vpc_id     = "${aws_vpc.Network.id}"
+  cidr_block = "${var.dmz_subnet_cidr}"
+  tags = {
+    Name = "Dmz Subnet"
+  }
+}
