@@ -57,6 +57,6 @@ resource "aws_s3_bucket" "bucket123" {
 resource "aws_efs_file_system" "ebs_data" {
 
 }
-resource "aws_ecs_cluster" "ecs_clu" {
-  name = "${data.aws_ecs_cluster.ecs_httpd.ecs_clu}"
-}
+#resource "aws_ecs_cluster" "ecs_clu" {
+ # name = "${data.aws_ecs_cluster.ecs_httpd.ecs_clu}"
+#}

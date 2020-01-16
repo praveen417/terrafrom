@@ -10,6 +10,6 @@ variable "subnet_cidr" {
   default = "10.0.10.0/24"
 }
 
-data "aws_ecs_cluster" "ecs_httpd" {
-  cluster_name = "ecs_http_prd"
-}
+#data "aws_ecs_cluster" "ecs_httpd" {
+#  cluster_name = "ecs_http_prd"
+#}
